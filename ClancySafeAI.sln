@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClancySafeAI.API", "ClancySafeAI.API\ClancySafeAI.API.csproj", "{EC271723-316B-4EB5-AB37-0AC5B300DC28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClancySafeAI.API", "ClancySafeAI.API\ClancySafeAI.API.csproj", "{EC271723-316B-4EB5-AB37-0AC5B300DC28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClancySafeAI.Core", "ClancySafeAI.Core\ClancySafeAI.Core.csproj", "{2B46893D-3C16-49EB-96D8-02893E74EABF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClancySafeAI.Core", "ClancySafeAI.Core\ClancySafeAI.Core.csproj", "{2B46893D-3C16-49EB-96D8-02893E74EABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClancySafeAI.Infrastruture", "ClancySafeAI.Infrastruture\ClancySafeAI.Infrastruture.csproj", "{2F95F2C8-56A7-4459-A889-9427EA4D9835}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClancySafeAI.Tests", "ClancySafeAI.Tests\ClancySafeAI.Tests.csproj", "{49A2A714-32DE-42A9-90D6-007134291D5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClancySafeAI.Tests", "ClancySafeAI.Tests\ClancySafeAI.Tests.csproj", "{49A2A714-32DE-42A9-90D6-007134291D5B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClancySafeAI.Client.Server", "ClancySafeAI.Client\ClancySafeAI.Client.Server\ClancySafeAI.Client.Server.csproj", "{DA773864-6F05-4370-BC02-368CA8F94469}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClancySafeAI.Client.Server", "ClancySafeAI.Client\ClancySafeAI.Client.Server\ClancySafeAI.Client.Server.csproj", "{DA773864-6F05-4370-BC02-368CA8F94469}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "clancysafeai.client.client", "ClancySafeAI.Client\clancysafeai.client.client\clancysafeai.client.client.esproj", "{D1B126F4-1D48-4B6E-BFD0-8415A43F04F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curser Instructions", "Curser Instructions\Curser Instructions.csproj", "{2CE9E91A-4049-46F2-8B9D-8343200CA3B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClancySafeAI.Infrastructure", "ClancySafeAI.Infrastructure\ClancySafeAI.Infrastructure.csproj", "{21FD1004-A618-4746-82C0-9848375F3ACA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		{2B46893D-3C16-49EB-96D8-02893E74EABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B46893D-3C16-49EB-96D8-02893E74EABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B46893D-3C16-49EB-96D8-02893E74EABF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F95F2C8-56A7-4459-A889-9427EA4D9835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F95F2C8-56A7-4459-A889-9427EA4D9835}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F95F2C8-56A7-4459-A889-9427EA4D9835}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F95F2C8-56A7-4459-A889-9427EA4D9835}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49A2A714-32DE-42A9-90D6-007134291D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{49A2A714-32DE-42A9-90D6-007134291D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49A2A714-32DE-42A9-90D6-007134291D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{2CE9E91A-4049-46F2-8B9D-8343200CA3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE9E91A-4049-46F2-8B9D-8343200CA3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE9E91A-4049-46F2-8B9D-8343200CA3B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FD1004-A618-4746-82C0-9848375F3ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FD1004-A618-4746-82C0-9848375F3ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FD1004-A618-4746-82C0-9848375F3ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FD1004-A618-4746-82C0-9848375F3ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
