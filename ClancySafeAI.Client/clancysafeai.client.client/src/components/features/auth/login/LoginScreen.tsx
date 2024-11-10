@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../../ui/card';
+import { Button } from '../../../ui/button';
+import { Input } from '../../../ui/input';
+import { Alert, AlertDescription } from '../../../ui/alert';
+import { Link } from 'react-router-dom';
 
 interface LoginScreenProps {
     onLoginSuccess?: () => void;
@@ -123,8 +124,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="justify-center text-sm text-gray-500">
-                    Protected by ClancySafeAI
+                <CardFooter className="flex flex-col space-y-2 text-sm text-gray-500">
+                    <div>
+                        <Link to="/register" className="text-blue-600 hover:text-blue-800">
+                            Create new account
+                        </Link>
+                    </div>
+                    <div>
+                        Protected by ClancySafeAI
+                    </div>
                 </CardFooter>
             </Card>
         </div>

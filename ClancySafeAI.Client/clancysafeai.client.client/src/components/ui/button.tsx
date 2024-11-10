@@ -1,38 +1,30 @@
 // src/components/ui/button.tsx
 
-import React from 'react';
+import * as React from "react"
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'default' | 'outline' | 'destructive';
-    children: React.ReactNode;
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'outline' | 'destructive'
 }
 
-const Button: React.FC<ButtonProps> = ({
-    variant = 'default',
-    children,
-    className = '',
-    disabled,
-    ...props
-}) => {
-    const baseStyles = 'px-4 py-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'default', ...props }, ref) => {
+    const baseStyles = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background"
+    
     const variants = {
-        default: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-        outline: 'border border-gray-300 bg-transparent hover:bg-gray-50 focus:ring-gray-500',
-        destructive: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-    };
-
-    const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+      default: "bg-primary text-primary-foreground hover:bg-primary/90",
+      outline: "border border-input hover:bg-accent hover:text-accent-foreground",
+      destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    }
 
     return (
-        <button
-            className={`${baseStyles} ${variants[variant]} ${disabledStyles} ${className}`}
-            disabled={disabled}
-            {...props}
-        >
-            {children}
-        </button>
-    );
-};
+      <button
+        className={`${baseStyles} ${variants[variant]} ${className}`}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
 
-export { Button };
+export { Button }
