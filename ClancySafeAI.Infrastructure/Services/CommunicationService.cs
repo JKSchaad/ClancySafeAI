@@ -26,9 +26,13 @@ namespace ClancySafeAI.Infrastructure.Services
         {
             try
             {
-                // TODO: Implement SMS sending using Azure Communication Services
-                // For now, just log the OTP
-                _logger.LogInformation("OTP for {PhoneNumber}: {OTP}", phoneNumber, otp);
+                // Development only - log OTP clearly
+                _logger.LogInformation("******************************************");
+                _logger.LogInformation("DEVELOPMENT MODE - OTP for testing");
+                _logger.LogInformation($"Phone: {phoneNumber}");
+                _logger.LogInformation($"OTP: {otp}");
+                _logger.LogInformation("******************************************");
+                
                 return true;
             }
             catch (Exception ex)

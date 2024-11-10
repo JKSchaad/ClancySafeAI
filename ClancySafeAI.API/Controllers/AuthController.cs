@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ClancySafeAI.Core.Interfaces;
 using ClancySafeAI.Core.Models.Auth;
+using System.Threading;
+using ClancySafeAI.Core.Exceptions;
 
 namespace ClancySafeAI.API.Controllers
 {
@@ -23,9 +25,64 @@ namespace ClancySafeAI.API.Controllers
             IAuthService authService,
             ICommunicationService communicationService)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-            _communicationService = communicationService ?? throw new ArgumentNullException(nameof(communicationService));
+            _logger = logger;
+            _authService = authService;
+            _communicationService = communicationService;
+        }
+
+        [HttpPost("verify")]
+        public async Task<ActionResult<RegisterResponse>> VerifyOtp(
+            [FromBody] VerifyOtpRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            if (request == null)
+                return BadRequest(new RegisterResponse { Success = false, Message = "Invalid request" });
+
+            if (string.IsNullOrEmpty(request.Reference) || string.IsNullOrEmpty(request.Otp))
+                return BadRequest(new RegisterResponse { Success = false, Message = "Reference and OTP are required" });
+
+            try
+            {
+                _logger.LogInformation("Processing OTP verification for reference {Reference}", request.Reference);
+
+                var success = await _authService.VerifyOtpAndCreateUserAsync(
+                    request.Reference, 
+                    request.Otp,
+                    cancellationToken);
+                
+                if (!success)
+                {
+                    return BadRequest(new RegisterResponse 
+                    { 
+                        Success = false, 
+                        Message = "Invalid OTP or reference" 
+                    });
+                }
+
+                return Ok(new RegisterResponse
+                {
+                    Success = true,
+                    Message = "Registration completed successfully"
+                });
+            }
+            catch (RegistrationException ex)
+            {
+                _logger.LogWarning(ex, "Registration failed for reference {Reference}", request.Reference);
+                return BadRequest(new RegisterResponse 
+                { 
+                    Success = false, 
+                    Message = ex.Message 
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during OTP verification for reference {Reference}", request.Reference);
+                return StatusCode(500, new RegisterResponse 
+                { 
+                    Success = false, 
+                    Message = "An unexpected error occurred during verification" 
+                });
+            }
         }
 
         [HttpPost("register")]
@@ -33,12 +90,9 @@ namespace ClancySafeAI.API.Controllers
         {
             try
             {
-                _logger.LogInformation("Processing registration request for phone number: {PhoneNumber}", request.PhoneNumber);
-
                 // Check if user already exists
                 if (await _authService.UserExistsAsync(request.PhoneNumber))
                 {
-                    _logger.LogWarning("Registration failed - user already exists: {PhoneNumber}", request.PhoneNumber);
                     return Conflict(new RegisterResponse 
                     { 
                         Success = false, 
@@ -47,15 +101,13 @@ namespace ClancySafeAI.API.Controllers
                 }
 
                 // Generate OTP and reference
-                (string otp, string reference) = await _authService.GenerateOtpAsync(request.PhoneNumber);
+                var (otp, reference) = await _authService.GenerateOtpAsync(request.PhoneNumber);
                 
-                // Send OTP via SMS
+                // Send OTP via SMS (in development, this will log to console)
                 await _communicationService.SendOtpSmsAsync(request.PhoneNumber, otp);
 
                 // Store user registration data temporarily
                 await _authService.StoreRegistrationDataAsync(reference, request);
-
-                _logger.LogInformation("Registration initiated successfully for phone number: {PhoneNumber}", request.PhoneNumber);
 
                 return Ok(new RegisterResponse
                 {
@@ -66,52 +118,11 @@ namespace ClancySafeAI.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during user registration for phone number: {PhoneNumber}", request.PhoneNumber);
+                _logger.LogError(ex, "Error during user registration");
                 return StatusCode(500, new RegisterResponse 
                 { 
                     Success = false, 
                     Message = "An error occurred during registration" 
-                });
-            }
-        }
-
-        [HttpPost("verify")]
-        public async Task<ActionResult<RegisterResponse>> VerifyOtp([FromBody] VerifyOtpRequest request)
-        {
-            try
-            {
-                _logger.LogInformation("Processing OTP verification for reference: {Reference}", request.Reference);
-
-                // Check if reference exists and OTP is valid
-                var isValid = await _authService.ValidateOtpAsync(request.Reference, request.Otp);
-                if (!isValid)
-                {
-                    _logger.LogWarning("OTP verification failed for reference: {Reference}", request.Reference);
-                    return BadRequest(new RegisterResponse
-                    {
-                        Success = false,
-                        Message = "Invalid OTP code"
-                    });
-                }
-
-                // Complete user registration here
-                var user = await _authService.CompleteRegistrationAsync(request.Reference);
-
-                _logger.LogInformation("OTP verification and registration completed successfully for reference: {Reference}", request.Reference);
-
-                return Ok(new RegisterResponse
-                {
-                    Success = true,
-                    Message = "Registration completed successfully"
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error during OTP verification for reference: {Reference}", request.Reference);
-                return StatusCode(500, new RegisterResponse
-                {
-                    Success = false,
-                    Message = "An error occurred during verification"
                 });
             }
         }
