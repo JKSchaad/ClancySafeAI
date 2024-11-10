@@ -38,10 +38,8 @@
     <Folder Include="src\config\" />
     <Folder Include="src\hooks\" />
     <Folder Include="src\services\api\" />
-    <Folder Include="src\services\auth\" />
     <Folder Include="src\services\safepass\" />
     <Folder Include="src\services\training\" />
-    <Folder Include="src\store\slices\" />
     <Folder Include="src\styles\" />
     <Folder Include="src\types\" />
     <Folder Include="src\utils\" />
