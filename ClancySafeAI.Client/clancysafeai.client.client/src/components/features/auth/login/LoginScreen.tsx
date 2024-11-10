@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../../ui/card';
 import { Button } from '../../../ui/button';
 import { Input } from '../../../ui/input';
 import { Alert, AlertDescription } from '../../../ui/alert';
-import { Link } from 'react-router-dom';
+import api from '../../../../services/api';
 
 interface LoginScreenProps {
     onLoginSuccess?: () => void;
@@ -13,19 +14,30 @@ interface LoginScreenProps {
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [otp, setOtp] = useState('');
+    const [otpReference, setOtpReference] = useState('');
     const [step, setStep] = useState<'phone' | 'otp'>('phone');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleSendOTP = async () => {
         try {
             setLoading(true);
             setError(null);
-            // TODO: Integrate with actual API
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-            setStep('otp');
-        } catch (err) {
-            setError('Failed to send OTP. Please try again.');
+            
+            const response = await api.post('/api/auth/login', {
+                phoneNumber
+            });
+
+            if (response.data.success) {
+                setOtpReference(response.data.otpReference);
+                setStep('otp');
+            } else {
+                setError('Failed to send OTP. Please try again.');
+            }
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -35,12 +47,21 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         try {
             setLoading(true);
             setError(null);
-            // TODO: Integrate with actual API
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-            // Handle successful login
-            onLoginSuccess?.();
-        } catch (err) {
-            setError('Invalid OTP. Please try again.');
+            
+            const response = await api.post('/api/auth/login/verify', {
+                reference: otpReference,
+                otp
+            });
+
+            if (response.data.success) {
+                onLoginSuccess?.();
+                navigate('/dashboard');
+            } else {
+                setError('Invalid OTP. Please try again.');
+            }
+        } catch (err: any) {
+            console.error('Verification error:', err);
+            setError(err.response?.data?.message || 'Invalid OTP. Please try again.');
         } finally {
             setLoading(false);
         }

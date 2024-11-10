@@ -120,4 +120,38 @@ public class AuthService : IAuthService
             throw new RegistrationException("An error occurred during user registration", ex);
         }
     }
+
+    public async Task<(string otp, string reference)> GenerateLoginOtpAsync(string phoneNumber, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            // Check if user exists
+            var userExists = await _userRepository.ExistsAsync(phoneNumber, cancellationToken);
+            if (!userExists)
+            {
+                throw new RegistrationException("User not found");
+            }
+
+            // Generate OTP
+            return await _otpService.GenerateOtpAsync(phoneNumber, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating login OTP for {PhoneNumber}", phoneNumber);
+            throw;
+        }
+    }
+
+    public async Task<bool> VerifyLoginOtpAsync(string reference, string otp, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await _otpService.ValidateOtpAsync(reference, otp, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error verifying login OTP for reference {Reference}", reference);
+            throw;
+        }
+    }
 }

@@ -126,5 +126,77 @@ namespace ClancySafeAI.API.Controllers
                 });
             }
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<RegisterResponse>> Login([FromBody] LoginRequest request)
+        {
+            try
+            {
+                // Check if user exists
+                if (!await _authService.UserExistsAsync(request.PhoneNumber))
+                {
+                    return NotFound(new RegisterResponse 
+                    { 
+                        Success = false, 
+                        Message = "User not found" 
+                    });
+                }
+
+                // Generate OTP and reference
+                var (otp, reference) = await _authService.GenerateLoginOtpAsync(request.PhoneNumber);
+                
+                // Send OTP via SMS
+                await _communicationService.SendOtpSmsAsync(request.PhoneNumber, otp);
+
+                return Ok(new RegisterResponse
+                {
+                    Success = true,
+                    Message = "OTP sent successfully",
+                    OtpReference = reference
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during login for {PhoneNumber}", request.PhoneNumber);
+                return StatusCode(500, new RegisterResponse 
+                { 
+                    Success = false, 
+                    Message = "An error occurred during login" 
+                });
+            }
+        }
+
+        [HttpPost("login/verify")]
+        public async Task<ActionResult<RegisterResponse>> VerifyLogin([FromBody] VerifyOtpRequest request)
+        {
+            try
+            {
+                var success = await _authService.VerifyLoginOtpAsync(request.Reference, request.Otp);
+                
+                if (!success)
+                {
+                    return BadRequest(new RegisterResponse 
+                    { 
+                        Success = false, 
+                        Message = "Invalid OTP" 
+                    });
+                }
+
+                return Ok(new RegisterResponse
+                {
+                    Success = true,
+                    Message = "Login successful"
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during login verification");
+                return StatusCode(500, new RegisterResponse 
+                { 
+                    Success = false, 
+                    Message = "An error occurred during verification" 
+                });
+            }
+        }
     }
 } 

@@ -13,4 +13,6 @@ public interface IAuthService
     Task<(string otp, string reference)> GenerateOtpAsync(string phoneNumber, CancellationToken cancellationToken = default);
     Task<bool> StoreRegistrationDataAsync(string reference, RegisterRequest request, CancellationToken cancellationToken = default);
     Task<bool> VerifyOtpAndCreateUserAsync(string reference, string otp, CancellationToken cancellationToken = default);
+    Task<(string otp, string reference)> GenerateLoginOtpAsync(string phoneNumber, CancellationToken cancellationToken = default);
+    Task<bool> VerifyLoginOtpAsync(string reference, string otp, CancellationToken cancellationToken = default);
 }
