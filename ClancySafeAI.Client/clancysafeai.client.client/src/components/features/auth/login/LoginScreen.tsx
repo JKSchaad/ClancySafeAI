@@ -43,7 +43,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         }
     };
 
-    const handleVerifyOTP = async () => {
+    const handleVerifyOTP = async (otp: string) => {
         try {
             setLoading(true);
             setError(null);
@@ -54,7 +54,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             });
 
             if (response.data.success) {
+                localStorage.setItem('isAuthenticated', 'true');
+                
                 onLoginSuccess?.();
+                
                 navigate('/dashboard');
             } else {
                 setError('Invalid OTP. Please try again.');
@@ -124,7 +127,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                             />
                             <Button
                                 className="w-full"
-                                onClick={handleVerifyOTP}
+                                onClick={() => handleVerifyOTP(otp)}
                                 disabled={otp.length !== 6 || loading}
                             >
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
