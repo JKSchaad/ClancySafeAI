@@ -1,0 +1,19 @@
+mkdir -p ClancySafeAI.Client/clancysafeai.client.client/public/assets
+# Add placeholder images and audio files
+touch ClancySafeAI.Client/clancysafeai.client.client/public/assets/ai-coach-avatar.png
+touch ClancySafeAI.Client/clancysafeai.client.client/public/assets/placeholder-audio.mp3 
+
+# Navigate to the client directory
+cd ClancySafeAI.Client/clancysafeai.client.client
+
+# Remove existing node_modules and lock file
+rm -rf node_modules package-lock.json
+
+# Install dependencies
+npm install react react-dom @types/react @types/react-dom next lucide-react @radix-ui/react-progress @radix-ui/react-slot class-variance-authority clsx tailwind-merge @vitejs/plugin-react
+
+# Install dev dependencies
+npm install -D @types/node typescript autoprefixer postcss tailwindcss
+
+# Start the development server
+npm run dev

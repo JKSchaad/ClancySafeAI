@@ -9,20 +9,6 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="blueprints\ClancySafeAI Coder Role and Responsibilities.md" />
-    <None Remove="blueprints\ClancySafeAI Project Manager Role and Responsibilities.md" />
-    <None Remove="blueprints\ClancySafeAI Project Status Report - November 9, 2024.md" />
-    <None Remove="blueprints\ClancySafeAI-blueprint.md" />
-    <None Remove="blueprints\ClancySafeAI-Narrative.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="components\common\" />
-    <Folder Include="components\features\auth\" />
-    <Folder Include="components\features\dashboard\" />
-    <Folder Include="components\features\documents\" />
-    <Folder Include="components\features\safepass\" />
-    <Folder Include="components\features\training\" />
-    <Folder Include="components\layouts\" />
     <Folder Include="config\" />
     <Folder Include="hooks\" />
     <Folder Include="services\api\" />
